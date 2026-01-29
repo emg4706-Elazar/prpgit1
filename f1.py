@@ -53,3 +53,36 @@ def smart_send_packet(packet: Packet, satellites: list):
              attempt_transmission(packets[-1])
         except:
             print("Transmission failed")
+
+### גירסא שמדפיסה את המסע בצורה טובה 
+
+my_space = SpaceNetwork(level=1)
+earth = SpaceEntityNotSat("Earth", 0)
+sat1 = Satellite("Sat1", 100)
+sat2 = Satellite("Sat2", 400)
+sat3 = Satellite("Sat3", 300)
+sat4 = Satellite("Sat4", 150)
+sat5 = Satellite("Sat5", 450)
+sat6 = Satellite("Sat6", 250)
+
+sates = [ sat1, sat2, sat3, sat4,sat5,sat6]
+
+
+def smart_send_packet(packet: Packet, satellites: list):
+    max_range = 150
+    packet = packet
+    satellites = satellites
+    sat_source = packet.sender
+    dist_source = packet.sender.distance_from_earth
+    trip = [packet.receiver]
+    while trip[-1].distance_from_earth - dist_source > max_range:
+        target = trip[-1].distance_from_earth
+        difference_range = target - max_range
+        sates_in_range = []
+        for sati in satellites:
+            if target > sati.distance_from_earth >= difference_range:
+                sates_in_range.append(sati)
+        sates_in_range.sort(key=lambda sat: sat.distance_from_earth)
+        hope = sates_in_range[0]
+        trip.append(hope)
+    trip.append(sat_source)
