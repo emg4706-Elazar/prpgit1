@@ -54,7 +54,7 @@ def smart_send_packet(packet: Packet, satellites: list):
         except:
             print("Transmission failed")
 
-### גירסא שמדפיסה את המסע בצורה טובה 
+### גירסא שמדפיסה את המסע בצורה טובה
 
 my_space = SpaceNetwork(level=1)
 earth = SpaceEntityNotSat("Earth", 0)
@@ -86,3 +86,23 @@ def smart_send_packet(packet: Packet, satellites: list):
         hope = sates_in_range[0]
         trip.append(hope)
     trip.append(sat_source)
+    # ## creating packets
+    packets = []
+    for i in range(len(trip) - 1):
+        if i == 0:
+            packet.sender = trip[1]
+            packets.append(packet)
+        else:
+            re_packet = RelayPacket(packets[-1], trip[i + 1], trip[i])
+            packets.append(re_packet)
+    print(packets[-1])
+
+    ## sending packet:
+    try:
+        attempt_transmission(packets[-1])
+    except:
+        print("Transmission failed")
+
+
+p1 = Packet("Hello, How are you?", earth, sat5)
+smart_send_packet(p1, sates)
