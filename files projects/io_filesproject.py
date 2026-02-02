@@ -40,8 +40,7 @@ valid_user(username,password)
 with open("guesses.txt","r",encoding="utf-8") as f:
     record = f.readline().rstrip("\n")
 if record:
-    print(f"Win record: {record}")
-
+    print(f"Record win: {record}")
 
 SECRET_NUMBER = random.randint(0,500)
 win = False
@@ -52,10 +51,14 @@ while not win:
     win = is_right_number(SECRET_NUMBER,num)
     guesses += 1
 
-if guesses < int(record):
+if not record:
+    with open("guesses.txt", "w", encoding="utf-8") as f:
+        f.write(str(guesses))
+elif guesses < int(record):
     with open("guesses.txt", "w", encoding="utf-8") as f:
         f.write(str(guesses))
     print("saved new record")
+    
 print()
 print(f"Secret number: {SECRET_NUMBER}")
 print(f"number of guesses: {guesses}")
